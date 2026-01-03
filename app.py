@@ -5,12 +5,12 @@ import matplotlib.pyplot as plt   # For plot graph
 
 
 
-st.set_page_config(layout='wide',page_title = 'Startup Analytics',page_icon='Wallpaper.png')  # For making the layout wider
+st.set_page_config(layout='wide',page_title = 'Startup Analytics',page_icon='Content/Wallpaper.png')  # For making the layout wider
 df = pd.read_csv('startup_cleaned.csv')
 df['date'] = pd.to_datetime(df['date'],format='mixed',errors = 'coerce')
 # st.dataframe(df)
 df['investors'] = df['investors'].fillna('Undisclosed')
-
+st.title('Warning--Now on Developement Phase')
 def load_overall_analysis():
 
     st.title('Overall Analysis')
