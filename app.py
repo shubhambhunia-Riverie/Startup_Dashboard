@@ -1,8 +1,8 @@
-import coerce
+
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt   # For plot graph
-import time
+
 
 
 st.set_page_config(layout='wide',page_title = 'Startup Analytics',page_icon='Wallpaper.png')  # For making the layout wider
