@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt   # For plot graph
 st.set_page_config(layout='wide',page_title = 'Startup Analytics',page_icon='Content/Wallpaper.png')  # For making the layout wider
 df = pd.read_csv('Content/startup_cleaned.csv')
 df['date'] = pd.to_datetime(df['date'],format='mixed',errors = 'coerce')
+df.set_index('Sr No',inplace = True)
 # st.dataframe(df)
 df['investors'] = df['investors'].fillna('Undisclosed')
 st.title('Warning--Now on Development Phase')
