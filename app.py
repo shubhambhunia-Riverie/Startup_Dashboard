@@ -6,11 +6,11 @@ import matplotlib.pyplot as plt   # For plot graph
 
 
 st.set_page_config(layout='wide',page_title = 'Startup Analytics',page_icon='Content/Wallpaper.png')  # For making the layout wider
-df = pd.read_csv('startup_cleaned.csv')
+df = pd.read_csv('Content/startup_cleaned.csv')
 df['date'] = pd.to_datetime(df['date'],format='mixed',errors = 'coerce')
 # st.dataframe(df)
 df['investors'] = df['investors'].fillna('Undisclosed')
-st.title('Warning--Now on Developement Phase')
+st.title('Warning--Now on Development Phase')
 def load_overall_analysis():
 
     st.title('Overall Analysis')
@@ -22,13 +22,13 @@ def load_overall_analysis():
     with col2:
         # MAx amount infused in a startup
         max_inv = df.groupby('startup')['amount'].max().sort_values(ascending=False).head(1).values[0]
-        st.metric('MAximum Investment in a single startup', str(int(max_inv)) + ' Cr')
+        st.metric('Maximum Investment in a single startup', str(int(max_inv)) + ' Cr')
     with col3:
         # Average investment
         avg_inv = df.groupby('startup')['amount'].sum().mean()
         st.metric('Average Investment', str(round(avg_inv)) + ' Cr')
     with col4:
-        # TOtal funded Startup
+        # Total funded Startup
         total_startup = df['startup'].nunique()
         st.metric('Total funded Startups', str(total_startup))
 
@@ -52,7 +52,7 @@ def load_overall_analysis():
 
 
 
-# Load the selected invester name function
+# Load the selected investor name function
 def load_investors_details(investor):
     st.title(investor)
     #Load the recent 5 investment of the investor function
@@ -70,17 +70,16 @@ def load_investors_details(investor):
         ax.bar(biggest_inv.index, biggest_inv.values)
         st.pyplot(fig)
     with col2:
-        #Biggest investment sectorwise
+        #Biggest investment sector wise
         biggest_sec = df[df['investors'].str.contains(investor)].groupby('vertical')['amount'].sum().sort_values(
             ascending=False).head(5)
-        st.subheader('Biggest Investment sectorwise')
+        st.subheader('Biggest Investment sector wise')
         fig1 , ax1 = plt.subplots()
         ax1.bar(biggest_sec.index, biggest_sec.values)
         st.pyplot(fig1)
     col1,col2 = st.columns(2)
     with col1:
-        fig, ax = plt.subplots()
-        # Pie plot for Sectorwise investment
+        # Pie plot for Sector wise investment
         vertical_series = df[df['investors'].str.contains(investor)].groupby('vertical')['amount'].sum().sort_values(ascending = False).head()
         st.subheader('Sector wise Investment')
         fig2,ax2 = plt.subplots()
@@ -104,7 +103,7 @@ def load_investors_details(investor):
         ax4.pie(city_series, labels=city_series.index, autopct='%1.1f%%')
         st.pyplot(fig4)
     with col2:
-        #year on year investment growth
+        #year-on-year investment growth
         df['year'] = df['date'].dt.year
         year_series = df[df['investors'].str.contains(investor)].groupby('year')['amount'].sum()
         st.subheader('Year wise Investment')
@@ -116,7 +115,7 @@ def load_investors_details(investor):
 
 
 st.sidebar.title('Startup Funding Analysis')
-option = st.sidebar.selectbox('Select One',['Overall Analysis','Startup','Invester'])
+option = st.sidebar.selectbox('Select One',['Overall Analysis','Startup','Investor'])
 
 if option == 'Overall Analysis':
     load_overall_analysis()
