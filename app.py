@@ -12,9 +12,56 @@ df.set_index('Sr No',inplace = True)
 # st.dataframe(df)
 df['investors'] = df['investors'].fillna('Undisclosed')
 st.title('Warning--Now on Development Phase')
+
+def load_startup_analysis(startup):
+    #st.title(startup)
+    st.markdown(
+        f"<h1 style='text-align: center; margin-bottom: 0;'>{startup}</h1>",
+        unsafe_allow_html=True
+    )
+    st.divider()
+    col1,col2,col3,col4 = st.columns(4)
+    with col1:
+        # Which city based startup
+        city = df[df['startup'] == startup]['city'].values[0]
+        st.markdown("### Founded In")
+        st.write(city)
+    with col2:
+        # Sector of the startup
+        sector = df[df['startup'] == startup]['vertical'].values[0]
+        st.markdown("### Sector")
+        st.write(sector)
+
+    with col3:
+        # Subsector of the startup
+        subsector = df[df['startup'] == startup]['SubVertical'].values[0]
+        st.markdown("### Sub Sector")
+        st.write(subsector if pd.notna(subsector) else "Not available")
+    with col4:
+        # Total funding got
+        funding = df.groupby('startup')['amount'].sum().sort_values(ascending = False)[startup]
+        st.markdown("### Funding Raised")
+        st.markdown(f"#### {funding} Cr")
+    st.divider()
+    st.markdown(
+        f"<h1 style='text-align: center; margin-bottom: 0;'>{'Funding Partners'}</h1>",
+        unsafe_allow_html=True
+    )
+    st.dataframe(df[df['startup'] == startup][['investors','amount','round','year']])
+
+
+
+
+
+
 def load_overall_analysis():
 
-    st.title('Overall Analysis')
+    #st.title('Overall Analysis')
+    st.markdown(
+        f"<h1 style='text-align: center; margin-bottom: 0;'>{'Overall Analysis'}</h1>",
+        unsafe_allow_html=True
+    )
+    st.divider()
     col1,col2,col3,col4 = st.columns(4)
     with col1:
         # Total investment amount
@@ -55,7 +102,12 @@ def load_overall_analysis():
 
 # Load the selected investor name function
 def load_investors_details(investor):
-    st.title(investor)
+    #st.title(investor)
+    st.markdown(
+        f"<h1 style='text-align: center; margin-bottom: 0;'>{investor}</h1>",
+        unsafe_allow_html=True
+    )
+    st.divider()
     #Load the recent 5 investment of the investor function
     last5_df = df[df['investors'].str.contains(investor)].head()[['date','startup','vertical','SubVertical','city','round','amount']]
     st.subheader('Most Recent Investment')
@@ -122,9 +174,11 @@ if option == 'Overall Analysis':
     load_overall_analysis()
 
 elif option == 'Startup':
-    st.sidebar.selectbox('Select Startup',sorted(df['startup'].unique().tolist()))
+    selected_startup = st.sidebar.selectbox('Select Startup',sorted(df['startup'].unique().tolist()))
     btn1 = st.sidebar.button('Find Startup details')
-    st.title('Startup Funding Analysis')
+
+    if btn1:
+        load_startup_analysis(selected_startup)
 else:
     selected_investors = st.sidebar.selectbox('Select Investors',sorted(set(df['investors'].str.split(',').sum())))
     btn2 = st.sidebar.button('Find Investor details')
